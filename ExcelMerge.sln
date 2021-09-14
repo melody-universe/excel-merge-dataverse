@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.31613.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelMergeLibrary", "ExcelMergeLibrary\ExcelMergeLibrary.csproj", "{1587D978-7D25-4FDB-B2AE-C9FF09036A50}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MergeDocumentsConsoleApp", "MergeDocumentsConsoleApp\MergeDocumentsConsoleApp.csproj", "{7E301E2C-4DB6-4B93-B977-AFB2B880FD6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeActivities", "Plugins\CodeActivities.csproj", "{983000DE-861E-4BB0-A4C7-1B4B569ABF00}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{1587D978-7D25-4FDB-B2AE-C9FF09036A50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1587D978-7D25-4FDB-B2AE-C9FF09036A50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1587D978-7D25-4FDB-B2AE-C9FF09036A50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E301E2C-4DB6-4B93-B977-AFB2B880FD6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E301E2C-4DB6-4B93-B977-AFB2B880FD6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E301E2C-4DB6-4B93-B977-AFB2B880FD6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E301E2C-4DB6-4B93-B977-AFB2B880FD6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{983000DE-861E-4BB0-A4C7-1B4B569ABF00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{983000DE-861E-4BB0-A4C7-1B4B569ABF00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{983000DE-861E-4BB0-A4C7-1B4B569ABF00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{983000DE-861E-4BB0-A4C7-1B4B569ABF00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
