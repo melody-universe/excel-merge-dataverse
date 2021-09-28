@@ -31,6 +31,7 @@ namespace ExcelMerge.Library
                 get { return _dictionary[index]; }
                 set { _dictionary[index] = value; }
             }
+            public bool ContainsKey(T3 key) => _dictionary.ContainsKey(key);
         }
 
         public void Add(T1 t1, T2 t2)

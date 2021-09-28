@@ -81,9 +81,16 @@ namespace ExcelMerge.Library
                             {
                                 uniqueKeys.Add(key);
                                 for(var sourceColumnIndex = 1;
-                                    sourceColumnIndex < inputWorksheet.Dimension.Columns;
+                                    sourceColumnIndex <= inputWorksheet.Dimension.Columns;
                                     sourceColumnIndex++)
                                 {
+                                    var sourceColumnLabel = inputColumnMap.Reverse[sourceColumnIndex];
+                                    if(!templateColumnMap.Forward.ContainsKey(sourceColumnLabel))
+                                    {
+                                        throw new IndexOutOfRangeException(
+                                            $"Input file contains a column called \"{sourceColumnLabel},\" but this column is missing from the template."
+                                        );
+                                    }
                                     var destinationColumnIndex = templateColumnMap.Forward[
                                         inputColumnMap.Reverse[sourceColumnIndex]];
                                     worksheet.Cells[rowIndex, destinationColumnIndex].Value =
@@ -101,7 +108,7 @@ namespace ExcelMerge.Library
         private static Map<string, int> CreateColumnMap(ExcelWorksheet worksheet)
         {
             var map = new Map<string, int>();
-            for(var column = 1; column <worksheet.Dimension.Columns; column++)
+            for(var column = 1; column <= worksheet.Dimension.Columns; column++)
             {
                 var label = ((string)worksheet.Cells[1, column].Value).Trim();
                 map.Add(label, column);
