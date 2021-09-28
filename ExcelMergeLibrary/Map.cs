@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ExcelMerge.Library
 {
+    /// <summary>
+    /// Bi-directionary dictionary solution provided on Stack Overflow by Enigmativity
+    /// https://stackoverflow.com/a/10966684/16945184
+    /// </summary>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
     public class Map<T1, T2>
     {
         private Dictionary<T1, T2> _forward = new Dictionary<T1, T2>();
