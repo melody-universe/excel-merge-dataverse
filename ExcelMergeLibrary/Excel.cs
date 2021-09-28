@@ -17,8 +17,8 @@ namespace ExcelMerge.Library
             IEnumerable<byte[]> inputFiles,
             IEnumerable<int> keyColumns)
         {
-            var uniqueKeys = new HashSet<IList<string>>(
-                new ListComprarer<string>()
+            var uniqueKeys = new HashSet<IList<object>>(
+                new ListComprarer<object>()
             );
             return template.FromExcelPackage(package =>
             {
@@ -33,12 +33,47 @@ namespace ExcelMerge.Library
                             inputRowIndex <= inputWorksheet.Dimension.Rows;
                             inputRowIndex++)
                         {
-                            var key = new List<string>();
+                            var key = new List<object>();
+                            bool atLeastOneNonNull = false;
                             foreach (var columnIndex in keyColumns)
                             {
-                                var value = (string)inputWorksheet.Cells[
-                                    inputRowIndex, columnIndex].Value;
-                                key.Add(value);
+                                var objValue = inputWorksheet.Cells[
+                                    inputRowIndex,
+                                    columnIndex
+                                ].Value;
+                                object keyValue;
+                                if(objValue == null)
+                                {
+                                    keyValue = null;
+                                } else
+                                {
+                                    var type = objValue.GetType();
+                                    if (type == typeof(string))
+                                    {
+                                        var strValue = ((string)objValue).Trim();
+                                        if (string.IsNullOrEmpty(strValue))
+                                        {
+                                            keyValue = null;
+                                        }
+                                        else
+                                        {
+                                            keyValue = strValue;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        keyValue = objValue;
+                                    }
+                                }
+                                key.Add(keyValue);
+                                if(keyValue != null && !atLeastOneNonNull)
+                                {
+                                    atLeastOneNonNull = true;
+                                }
+                            }
+                            if(!atLeastOneNonNull)
+                            {
+                                continue;
                             }
                             if(!uniqueKeys.Contains(key))
                             {
@@ -69,7 +104,9 @@ namespace ExcelMerge.Library
                 }
                 for(var i = 0; i < x.Count; i++)
                 {
-                    if(!x[i].Equals(y[i]))
+                    if((x[i] == null && y[i] != null)
+                        || (x[i] != null && y[i] == null)
+                        || (x[i] != null && y[i] != null && !x[i].Equals(y[i])))
                     {
                         return false;
                     }
@@ -81,7 +118,7 @@ namespace ExcelMerge.Library
             {
                 return obj.Aggregate(
                     0,
-                    (current, next) => current + next.GetHashCode()
+                    (current, next) => current + (next?.GetHashCode() ?? 0)
                 );
             }
         }

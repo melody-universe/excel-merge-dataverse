@@ -13,18 +13,12 @@ namespace MergeDocumentsConsoleApp
         static void Main(string[] args)
         {
             var template = GetTemplateContents();
-            Console.WriteLine(
-                Convert.ToBase64String(
-                    template
-                )
-            );
-            return;
             var inputFiles = GetInputFilesContents();
             var outputContents = Excel.Merge(
                 template,
                 inputFiles,
                 new int[] {
-                    5, 6, 7, 8
+                    5, 6, 7, 8, 36
                 }
             );
             const string outputFileName = "Output.xlsx";
