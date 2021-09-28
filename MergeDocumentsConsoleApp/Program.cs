@@ -17,8 +17,12 @@ namespace MergeDocumentsConsoleApp
             var outputContents = Excel.Merge(
                 template,
                 inputFiles,
-                new int[] {
-                    5, 6, 7, 8, 36
+                new string[] {
+                    "Facility Name",
+                    "Facility Street Address",
+                    "Facility City",
+                    "Facility Zip",
+                    "Visit Date"
                 }
             );
             const string outputFileName = "Output.xlsx";

@@ -15,7 +15,7 @@ namespace ExcelMerge.Library
         public static byte[] Merge(
             byte[] template,
             IEnumerable<byte[]> inputFiles,
-            IEnumerable<int> keyColumns)
+            IEnumerable<string> keyColumns)
         {
             var uniqueKeys = new HashSet<IList<object>>(
                 new ListComprarer<object>()
@@ -24,22 +24,24 @@ namespace ExcelMerge.Library
             {
                 var worksheet = package.Workbook.Worksheets[0];
                 var rowIndex = 2;
+                var templateColumnMap = CreateColumnMap(worksheet);
                 foreach(var inputFile in inputFiles)
                 {
                     inputFile.WithExcelPackage(inputPackage =>
                     {
                         var inputWorksheet = inputPackage.Workbook.Worksheets[0];
+                        var inputColumnMap = CreateColumnMap(inputWorksheet);
                         for(var inputRowIndex = 2;
                             inputRowIndex <= inputWorksheet.Dimension.Rows;
                             inputRowIndex++)
                         {
                             var key = new List<object>();
                             bool atLeastOneNonNull = false;
-                            foreach (var columnIndex in keyColumns)
+                            foreach (var columnLabel in keyColumns)
                             {
                                 var objValue = inputWorksheet.Cells[
                                     inputRowIndex,
-                                    columnIndex
+                                    inputColumnMap.Forward[columnLabel]
                                 ].Value;
                                 object keyValue;
                                 if(objValue == null)
@@ -78,12 +80,14 @@ namespace ExcelMerge.Library
                             if(!uniqueKeys.Contains(key))
                             {
                                 uniqueKeys.Add(key);
-                                for(var columnIndex = 1;
-                                    columnIndex < inputWorksheet.Dimension.Columns;
-                                    columnIndex++)
+                                for(var sourceColumnIndex = 1;
+                                    sourceColumnIndex < inputWorksheet.Dimension.Columns;
+                                    sourceColumnIndex++)
                                 {
-                                    worksheet.Cells[rowIndex, columnIndex].Value =
-                                        inputWorksheet.Cells[inputRowIndex, columnIndex].Value;
+                                    var destinationColumnIndex = templateColumnMap.Forward[
+                                        inputColumnMap.Reverse[sourceColumnIndex]];
+                                    worksheet.Cells[rowIndex, destinationColumnIndex].Value =
+                                        inputWorksheet.Cells[inputRowIndex, sourceColumnIndex].Value;
                                 }
                                 rowIndex++;
                             }
@@ -92,6 +96,17 @@ namespace ExcelMerge.Library
                 }
                 return package.ToByteArray();
             });
+        }
+
+        private static Map<string, int> CreateColumnMap(ExcelWorksheet worksheet)
+        {
+            var map = new Map<string, int>();
+            for(var column = 1; column <worksheet.Dimension.Columns; column++)
+            {
+                var label = ((string)worksheet.Cells[1, column].Value).Trim();
+                map.Add(label, column);
+            }
+            return map;
         }
 
         private class ListComprarer<T> : EqualityComparer<IList<T>>
